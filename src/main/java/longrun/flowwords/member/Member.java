@@ -1,19 +1,26 @@
 package longrun.flowwords.member;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
+
+@NoArgsConstructor
 @Getter
-@Setter
+@Entity(name = "MEMBER")
 public class Member {
-    private Long id;
-    private String name;
-    private Grade grade;
 
-    public Member(Long id, String name, Grade grade) {
+    @Id
+    private String id;
+    private String password;
+    private MemberAuthority authority;
+
+    @Builder
+    public Member(String id, String password, MemberAuthority authority) {
         this.id = id;
-        this.name = name;
-        this.grade = grade;
-
+        this.password = password;
+        this.authority = authority;
     }
 }

@@ -1,6 +1,6 @@
 package longrun.flowwords.member;
 
-public enum Grade {
+public enum MemberAuthority {
     BASIC,
     VIP
 }

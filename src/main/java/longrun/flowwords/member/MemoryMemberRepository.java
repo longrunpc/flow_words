@@ -8,7 +8,6 @@ import java.util.Map;
 @Component
 public class MemoryMemberRepository implements MemberRepository {
 
-    //final 빼고
     private static final Map<Long, Member> store = new HashMap<>();
     @Override
     public void save(Member member) {

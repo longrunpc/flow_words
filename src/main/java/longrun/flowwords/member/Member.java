@@ -1,26 +1,32 @@
 package longrun.flowwords.member;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 
-@NoArgsConstructor
 @Getter
-@Entity(name = "MEMBER")
+@Entity
+@Builder
+@AllArgsConstructor
+@Table(name ="MEMBER")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private String id;
-    private String password;
-    private MemberAuthority authority;
 
-    @Builder
-    public Member(String id, String password, MemberAuthority authority) {
-        this.id = id;
-        this.password = password;
-        this.authority = authority;
-    }
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true, length = 30)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String phoneNun;
+
 }

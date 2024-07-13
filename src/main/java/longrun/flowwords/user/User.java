@@ -1,4 +1,4 @@
-package longrun.flowwords.member;
+package longrun.flowwords.user;
 
 import jakarta.persistence.*;
 import lombok.*;

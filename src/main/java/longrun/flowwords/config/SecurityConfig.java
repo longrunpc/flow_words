@@ -2,10 +2,10 @@ package longrun.flowwords.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import longrun.flowwords.member.JsonUsernamePasswordAuthenticationFilter;
-import longrun.flowwords.member.LoginFailureHandler;
-import longrun.flowwords.member.LoginSuccessJWTProvideHandler;
-import longrun.flowwords.member.UserDetailsServiceImpl;
+import longrun.flowwords.user.JsonUsernamePasswordAuthenticationFilter;
+import longrun.flowwords.user.LoginFailureHandler;
+import longrun.flowwords.user.LoginSuccessJWTProvideHandler;
+import longrun.flowwords.user.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

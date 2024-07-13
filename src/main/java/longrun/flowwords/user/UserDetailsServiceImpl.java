@@ -1,4 +1,4 @@
-package longrun.flowwords.member;
+package longrun.flowwords.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package longrun.flowwords.member;
+package longrun.flowwords.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

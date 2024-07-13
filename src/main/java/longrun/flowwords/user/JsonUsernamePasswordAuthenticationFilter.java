@@ -1,4 +1,4 @@
-package longrun.flowwords.member;
+package longrun.flowwords.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

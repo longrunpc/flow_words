@@ -1,22 +1,30 @@
-// src/LoginPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './LoginPage.css';
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (event) => {
+    const handleLogin = async (event) => {
         event.preventDefault();
 
-        // 여기에 로그인 로직을 추가하세요
-        // 예: API 요청을 통해 사용자 인증
-        if (username === 'user' && password === 'password') {
-            navigate('/app');
-        } else {
-            alert('Invalid username or password');
+        try {
+            const response = await axios.post('/api/login', {
+                email: email,
+                password: password
+            });
+
+            // 로그인 성공 시 처리
+            console.log('Login successful:', response.data);
+            alert('로그인 성공!');
+            navigate('/app'); // 로그인 성공 후 /app 페이지로 이동
+        } catch (error) {
+            // 로그인 실패 시 처리
+            console.error('Login error:', error);
+            alert('Invalid email or password');
         }
     };
 
@@ -25,11 +33,12 @@ const LoginPage = () => {
             <h1>Login</h1>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label>Username:</label>
+                    <label>Email:</label>
                     <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div>
@@ -38,6 +47,7 @@ const LoginPage = () => {
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <button type="submit">Login</button>

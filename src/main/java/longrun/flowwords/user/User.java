@@ -9,14 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name ="Users")
+@Table(name ="user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;

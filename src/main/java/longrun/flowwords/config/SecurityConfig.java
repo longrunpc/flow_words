@@ -31,12 +31,13 @@ public class SecurityConfig {
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("안녕");
         http	.csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) // 추가 : 커스터마이징 된 필터를 SpringSecurityFilterChain에 등록
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/user/signup", "/", "/login", "/album/init").permitAll()
+                        .requestMatchers("/api/signup", "/", "/api/login").permitAll()
                         .anyRequest().authenticated())
 //				.formLogin(formLogin -> formLogin
 //						.loginPage("/login")
@@ -45,7 +46,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 );
         return http.build();
     }

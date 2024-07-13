@@ -19,6 +19,13 @@ const LoginPage = () => {
 
             // 로그인 성공 시 처리
             console.log('Login successful:', response.data);
+
+            const accessToken = response.data.AccessToken;
+            const refreshToken = response.data.RefreshToken;
+
+            localStorage.setItem('token', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+
             alert('로그인 성공!');
             navigate('/app'); // 로그인 성공 후 /app 페이지로 이동
         } catch (error) {

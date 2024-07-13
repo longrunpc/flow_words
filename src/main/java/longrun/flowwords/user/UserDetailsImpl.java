@@ -13,7 +13,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final Users users;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,12 +23,12 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return users.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail(); // 이메일을 사용자명으로 사용
+        return users.getEmail(); // 이메일을 사용자명으로 사용
     }
 
     @Override

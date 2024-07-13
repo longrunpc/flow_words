@@ -2,10 +2,7 @@ package longrun.flowwords.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import longrun.flowwords.user.JsonUsernamePasswordAuthenticationFilter;
-import longrun.flowwords.user.LoginFailureHandler;
-import longrun.flowwords.user.LoginSuccessJWTProvideHandler;
-import longrun.flowwords.user.UserDetailsServiceImpl;
+import longrun.flowwords.user.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,17 +24,17 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
+    private final UsersRepository usersRepository;
+    private final JwtService jwtService;
 
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        System.out.println("안녕");
         http	.csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) // 추가 : 커스터마이징 된 필터를 SpringSecurityFilterChain에 등록
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/signup", "/", "/api/login").permitAll()
+                        .requestMatchers("api/*").permitAll()
                         .anyRequest().authenticated())
 //				.formLogin(formLogin -> formLogin
 //						.loginPage("/login")
@@ -46,8 +43,11 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
+        http
+                .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) // 추가 : 커스터마이징 된 필터를 SpringSecurityFilterChain에 등록
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -75,7 +75,7 @@ public class SecurityConfig {
 
     @Bean
     public LoginSuccessJWTProvideHandler loginSuccessJWTProvideHandler(){
-        return new LoginSuccessJWTProvideHandler();
+        return new LoginSuccessJWTProvideHandler(jwtService, usersRepository);
     }
 
     @Bean
@@ -89,6 +89,13 @@ public class SecurityConfig {
         jsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
         jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessJWTProvideHandler());
         jsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        return jsonUsernamePasswordLoginFilter;
+    }
+
+    @Bean
+    public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter(){
+        JwtAuthenticationProcessingFilter jsonUsernamePasswordLoginFilter = new JwtAuthenticationProcessingFilter(jwtService, usersRepository);
+
         return jsonUsernamePasswordLoginFilter;
     }
 

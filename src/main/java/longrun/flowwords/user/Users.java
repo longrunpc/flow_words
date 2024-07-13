@@ -9,9 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name ="user")
+@Table(name ="users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

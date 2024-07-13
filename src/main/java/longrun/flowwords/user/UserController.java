@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UsersRepository usersRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -26,19 +26,19 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserRequest userRequest) {
         // Check if email is already registered
-        if (userRepository.existsByEmail(userRequest.getEmail())) {
+        if (usersRepository.existsByEmail(userRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already taken");
         }
 
         // Create new user
-        User newUser = User.builder()
+        Users newUsers = Users.builder()
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
                 .phoneNum(userRequest.getPhoneNum())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
                 .build();
 
-        userRepository.save(newUser);
+        usersRepository.save(newUsers);
         return ResponseEntity.ok("Signup successful");
     }
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // useHistory 제거
 import axios from 'axios';
 import './LoginPage.css';
 
 const LoginPage = () => {
-    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate(); // useNavigate 사용
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -17,19 +17,17 @@ const LoginPage = () => {
                 password: password
             });
 
-            // 로그인 성공 시 처리
-            console.log('Login successful:', response.data);
+            let accessToken = response.headers['authorization'];
+            let refreshToken = response.headers['authorization-refresh'];
 
-            const accessToken = response.data.AccessToken;
-            const refreshToken = response.data.RefreshToken;
-
+            console.log('access token :', accessToken);
+            console.log('refresh token :', refreshToken);
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
             alert('로그인 성공!');
-            navigate('/app'); // 로그인 성공 후 /app 페이지로 이동
+            navigate('/app'); // navigate 함수를 사용하여 /app 페이지로 이동
         } catch (error) {
-            // 로그인 실패 시 처리
             console.error('Login error:', error);
             alert('Invalid email or password');
         }
@@ -59,6 +57,9 @@ const LoginPage = () => {
                 </div>
                 <button type="submit">Login</button>
             </form>
+            <p>
+                아직 회원이 아니신가요? <Link to="/signup">회원 가입</Link>
+            </p>
         </div>
     );
 };

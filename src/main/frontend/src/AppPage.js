@@ -1,5 +1,5 @@
-// src/AppPage.js
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AppPage.css'; // AppPage.css 파일을 import
 
@@ -9,6 +9,7 @@ function AppPage() {
     const [responseMessage, setResponseMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedText, setSelectedText] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchData();
@@ -48,22 +49,30 @@ function AppPage() {
         setSelectedText(textarea.value.substring(selectionStart, selectionEnd));
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 삭제
+        localStorage.removeItem('refreshToken');
+        navigate('/login'); // 로그인 페이지로 리다이렉트
+    };
+
     return (
         <div className="container">
-            <div>
-                <textarea
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
-                    onMouseUp={handleTextSelect} // 마우스 버튼을 떼었을 때 선택된 텍스트를 가져옴
-                    onKeyUp={handleTextSelect} // 키보드로 텍스트를 선택했을 때 선택된 텍스트를 가져옴
-                    placeholder="글자를 입력하세요"
-                    rows="10" // 줄 수를 조정하여 크기를 변경
-                    style={{ width: '100%', resize: 'none' }} // 스타일을 추가하여 너비를 100%로 설정하고 크기 조정 기능을 비활성화
-                />
-                <button onClick={sendDataToBackend} disabled={isLoading}>
-                    {isLoading ? '보내는 중...' : '보내기'}
-                </button>
-            </div>
+            <h1>App Page</h1>
+            <textarea
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onMouseUp={handleTextSelect} // 마우스 버튼을 떼었을 때 선택된 텍스트를 가져옴
+                onKeyUp={handleTextSelect} // 키보드로 텍스트를 선택했을 때 선택된 텍스트를 가져옴
+                placeholder="글자를 입력하세요"
+                rows="10" // 줄 수를 조정하여 크기를 변경
+                style={{ width: '100%', resize: 'none' }} // 스타일을 추가하여 너비를 100%로 설정하고 크기 조정 기능을 비활성화
+            />
+            <button onClick={sendDataToBackend} disabled={isLoading}>
+                {isLoading ? '보내는 중...' : '보내기'}
+            </button>
+            <button onClick={handleLogout} style={{ marginTop: '20px' }}>
+                로그아웃
+            </button>
             <div>
                 안녕하세요 : {data}님 수정 필요한 부분은 드래그 해서 보내기를 눌러주세요.
             </div>

@@ -25,6 +25,8 @@ const App = () => {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 삭제
+        localStorage.removeItem('refreshToken'); // 로컬 스토리지에서 리프레시 토큰 삭제
         setAuthenticated(false);
     };
 
@@ -36,7 +38,7 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<MainPage />} />
-                <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+                <Route path="/login" element={authenticated ? <Navigate to="/app" /> : <LoginPage onLogin={handleLogin} />} />
                 <Route path="/signup" element={authenticated ? <Navigate to="/app" /> : <SignupPage />} />
                 <Route path="/app" element={authenticated ? <AppPage onLogout={handleLogout} /> : <Navigate to="/login" />} />
             </Routes>

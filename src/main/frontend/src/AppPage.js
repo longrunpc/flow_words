@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './AppPage.css'; // AppPage.css 파일을 import
 
-function AppPage() {
+function AppPage({ onLogout }) {
     const [data, setData] = useState('');
     const [inputText, setInputText] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
@@ -50,8 +50,7 @@ function AppPage() {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); // 로컬 스토리지에서 토큰 삭제
-        localStorage.removeItem('refreshToken');
+        onLogout();
         navigate('/login'); // 로그인 페이지로 리다이렉트
     };
 

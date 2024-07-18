@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'; // useHistory 제거
 import axios from 'axios';
 import './LoginPage.css';
 
-const LoginPage = () => {
+const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate(); // useNavigate 사용
@@ -26,6 +26,7 @@ const LoginPage = () => {
             localStorage.setItem('refreshToken', refreshToken);
 
             alert('로그인 성공!');
+            onLogin(); // 로그인 성공 후 인증 상태를 업데이트
             navigate('/app'); // navigate 함수를 사용하여 /app 페이지로 이동
         } catch (error) {
             console.error('Login error:', error);

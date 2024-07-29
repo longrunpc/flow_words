@@ -34,11 +34,8 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/login","/signup").permitAll()
                         .anyRequest().authenticated())
-//				.formLogin(formLogin -> formLogin
-//						.loginPage("/login")
-//						.defaultSuccessUrl("/home"))
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
@@ -47,7 +44,7 @@ public class SecurityConfig {
                 );
         http
                 .addFilterAfter(jsonUsernamePasswordLoginFilter(), LogoutFilter.class) // 추가 : 커스터마이징 된 필터를 SpringSecurityFilterChain에 등록
-                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonUsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), JsonUserNamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -84,8 +81,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter() throws Exception {
-        JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUsernamePasswordAuthenticationFilter(objectMapper);
+    public JsonUserNamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter() throws Exception {
+        JsonUserNamePasswordAuthenticationFilter jsonUsernamePasswordLoginFilter = new JsonUserNamePasswordAuthenticationFilter(objectMapper);
         jsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
         jsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessJWTProvideHandler());
         jsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
@@ -98,5 +95,6 @@ public class SecurityConfig {
 
         return jsonUsernamePasswordLoginFilter;
     }
+
 
 }

@@ -16,9 +16,14 @@ function AppPage({ onLogout }) {
     }, []);
 
     const fetchData = () => {
-        axios.get('/api/data')
+        const token = localStorage.getItem('token');
+        axios.get('/api/data', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(res => setData(res.data))
-            .catch(err => console.log(err));
+            .catch(err => console.log('err'));
     };
 
     const sendDataToBackend = () => {
@@ -28,8 +33,13 @@ function AppPage({ onLogout }) {
             return;
         }
 
+        const token = localStorage.getItem('token');
         setIsLoading(true); // 로딩 상태 시작
-        axios.post('/api/send', { message: textToSend })
+        axios.post('/api/send', { message: textToSend }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => {
                 console.log('데이터 전송 성공:', res.data);
                 setResponseMessage(res.data); // 백엔드에서 응답받은 데이터를 상태로 설정

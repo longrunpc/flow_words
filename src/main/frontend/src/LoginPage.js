@@ -20,8 +20,7 @@ const LoginPage = ({ onLogin }) => {
             let accessToken = response.headers['authorization'];
             let refreshToken = response.headers['authorization-refresh'];
 
-            console.log('access token :', accessToken);
-            console.log('refresh token :', refreshToken);
+
             localStorage.setItem('token', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 

@@ -15,10 +15,10 @@ const SignupPage = () => {
 
         try {
             const response = await axios.post('/api/signup', {
-                name,
-                email,
-                password,
-                phoneNum
+                name: name,
+                email: email,
+                password: password,
+                phoneNum: phoneNum
             });
 
             // 회원 가입 성공 시 처리

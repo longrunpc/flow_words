@@ -1,61 +1,19 @@
 package longrun.flowwords.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class UserController {
 
-    @Autowired
-    private UsersRepository usersRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserRequest userRequest) {
-        // Check if email is already registered
-        if (usersRepository.existsByEmail(userRequest.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already taken");
-        }
-
-        // Create new user
-        Users newUsers = Users.builder()
-                .name(userRequest.getName())
-                .email(userRequest.getEmail())
-                .phoneNum(userRequest.getPhoneNum())
-                .password(passwordEncoder.encode(userRequest.getPassword()))
-                .build();
-
-        usersRepository.save(newUsers);
-        return ResponseEntity.ok("Signup successful");
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // You can generate JWT token here if needed
-            // String jwtToken = jwtTokenProvider.generateToken((UserDetails) authentication.getPrincipal());
-
-            return ResponseEntity.ok("Login successful");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
-        }
+    @GetMapping("/data")
+    public String getUserName(@AuthenticationPrincipal UserDetailsImpl user) {
+        // 인증된 사용자 정보에서 사용자 이름을 가져와서 반환합니다.
+        return "Hello, " + user.getUsername();
     }
 }

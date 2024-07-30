@@ -37,7 +37,7 @@ function AppPage({ onLogout }) {
         setIsLoading(true); // 로딩 상태 시작
         axios.post('/api/send', { message: textToSend }, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
         })
             .then(res => {

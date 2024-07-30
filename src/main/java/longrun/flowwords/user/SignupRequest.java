@@ -1,9 +1,12 @@
 package longrun.flowwords.user;
 
-import lombok.Data;
+import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class UserRequest {
+@Getter
+@Setter
+public class SignupRequest {
     private String name;
     private String email;
     private String password;
